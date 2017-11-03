@@ -1,13 +1,12 @@
-//Author Marcus Lignercrona & Emelie Eriksson
+// Authors: Emelie Eriksson & Marcus Lignercrona
 #include <iostream>
 #include <string>
 #include <stdlib.h>
 #include <math.h>
+using namespace std;
+
 class factoring{
 	public:
-		int factorBase(long long number){
-			return roof();
-		}
 		long long powerHelp(int base,int exponent, int mod){
 			int toBeReturned = 1;
 			base = base % mod;
@@ -62,25 +61,96 @@ class factoring{
 			return true;
 		}
 
+
 };
-	int main (){
-		factoring fact;
-		long long a;
-		std::cin >> a;
-		while(1){
-			int b = fact.divisor2(a);
-			if(a!=1){
-				std::cout << "fail" << std::endl;
+
+// This implementation of gcd is from 
+// https://codereview.stackexchange.com/questions/66711/greatest-common-divisor
+int gcd(int a, int b){
+	return b == 0 ? a : gcd(b, a % b);
+}
+
+long long int pollards(long long int n){
+	if(n == 1)
+		return n;
+
+	srand (time(NULL));
+
+	long long int x = (rand() % n) + 3; 
+	long long int y = x;
+	long long int a = (rand() % n) + 3; // Constant for the f(x) = x^2 + a function
+
+	long long int currentgcd = 1;
+
+	while(currentgcd == 1){
+		// Turtle
+		x = (x*x + a) % n;
+
+		//Hare
+		y = (y*y + a) % n;
+		y = (y*y + a) % n;
+
+		//new gcd
+		currentgcd = gcd(abs(x - y), n);
+	}
+
+	return currentgcd;
+}
+
+long long int findPrimeFactor(long long int number, factoring fact){
+	// Run pollard 
+	int foundFactor = pollards(number);
+	// While the factor is not a prime
+	while(!fact.miller(foundFactor)){
+		// Keep factoring it
+		foundFactor = pollards(foundFactor);
+	}
+	return foundFactor;
+}
+
+int main (){
+	factoring fact;
+
+	long long int number;
+	std::cin >> number;
+
+	
+	
+	if(number > 10000){
+		std::cout << "fail" << std::endl;
+		return 0;
+	}
+
+	while(1){
+		// TODO: get all prime factors
+		int nrOfTwoFactors = fact.divisor2(number);
+		//std::cout << "nrOfTwoFactors: " << nrOfTwoFactors << "\n" << std::endl;
+
+		for(int i = 0; i < nrOfTwoFactors; i++){
+			std::cout << "2" << std::endl;
+		}
+
+		int factor = findPrimeFactor(number, fact);
+		std::cout << factor << std::endl;
+		int newNumber = number / factor;
+		while((newNumber) != 1){
+			if(newNumber%factor == 0){
+				std::cout << factor << std::endl;
+				newNumber = newNumber / factor;
 			}else{
-				for(int i = 0;i< b;++i){
-					std::cout << 2 << std::endl;
-				}
-			}
-			if(std::cin >> a){	
-				std::cout << "\n";
-			}
-			else{
-				break;
+				factor = findPrimeFactor(newNumber, fact);
+				std::cout << factor << std::endl;
+				newNumber = newNumber / factor;
 			}
 		}
+
+		if(std::cin >> number){	
+			std::cout << "\n";
+		}
+		else{
+			break;
+		}
+		//45678876456789876
 	}
+}
+
