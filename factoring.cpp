@@ -150,7 +150,7 @@ int main (){
 			std::cout << number << std::endl;
 	
         	if(number > 10000){
-        		std::cout << " fail" << std::endl;
+        		std::cout << "fail" << std::endl;
         		return 0;
         	}
 		}
