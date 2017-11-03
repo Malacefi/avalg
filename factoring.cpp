@@ -21,9 +21,9 @@ class factoring{
 		long long a;
 		std::cin >> a;
 		while(1){
-			std::cout << "fail";
+			std::cout << "fail" << std::endl;
 			if(std::cin >> a){
-				std::cout << "\n" <<"\n";
+				std::cout << "\n";
 			}
 			else{
 				break;
