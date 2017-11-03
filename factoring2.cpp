@@ -115,10 +115,11 @@ int main (){
     double n;
     do{
         if(std::cin >> n){ 
-            if(n > 100000){
+            if(n > 1000){
                 std::cout << "fail" << std::endl;
+                std::cout << "\n";
+                continue;
             }
-            std::cout << "\n";
         }
         else{
             break;
@@ -131,7 +132,7 @@ int main (){
         for(int i = 0; i < nrOfTwoFactors; i++){
             std::cout << "2" << std::endl;
         }
-        
+        if(number==1) continue;
         int factor = findPrimeFactor(number, fact);
         std::cout << factor << std::endl;
         int newNumber = number / factor;
@@ -145,5 +146,6 @@ int main (){
                 newNumber = newNumber / factor;
             }
         }
+        std::cout << "\n";
     }while(1);
 }
