@@ -112,8 +112,7 @@ int main (){
 	factoring fact;
 
 	long long int number;
-
-	while(1){
+	do{
 		if(std::cin >> number){	
 			
         	if(number >= 0){
@@ -124,6 +123,7 @@ int main (){
 		else{
 			break;
 		}
+	}while(1);
 		/*
 			// TODO: get all prime factors
 			int nrOfTwoFactors = fact.divisor2(number);
@@ -147,7 +147,7 @@ int main (){
 				std::cout << factor << std::endl;
 				newNumber = newNumber / factor;
 			}
-		}*/
+		}
 
-	}
+	}*/
 }
