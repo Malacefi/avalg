@@ -43,9 +43,9 @@ class factoring{
 				 		temp = pow(u,2);
 				 		u = temp % number;
 				 		if(u == 1) return false;
-				 		if(u == (-1)) break;
+				 		if(u == (number -1)) break;
 				 	}
-				 if(u == (-1)) continue;
+				 if(u == (number -1)) continue;
 				 return false;
 			}
 			return true;
