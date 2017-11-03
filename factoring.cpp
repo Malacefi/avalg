@@ -113,11 +113,9 @@ int main (){
 
 	long long int number;
 	std::cin >> number;
-
-	
 	
 	if(number > 10000){
-		std::cout << "fail" << std::endl;
+		std::cout << " fail" << std::endl;
 		return 0;
 	}
 
@@ -146,11 +144,18 @@ int main (){
 
 		if(std::cin >> number){	
 			std::cout << "\n";
+			
+			std::cout << "I AM HERE" << std::endl;
+			
+			std::cout << number << std::endl;
+	
+        	if(number > 10000){
+        		std::cout << " fail" << std::endl;
+        		return 0;
+        	}
 		}
 		else{
 			break;
 		}
-		//45678876456789876
 	}
 }
-
