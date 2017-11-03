@@ -112,22 +112,29 @@ int main (){
 	factoring fact;
 
 	long long int number;
-	std::cin >> number;
-	
-	if(number > 10000){
-		std::cout << " fail" << std::endl;
-		return 0;
-	}
 
 	while(1){
-		// TODO: get all prime factors
-		int nrOfTwoFactors = fact.divisor2(number);
-		//std::cout << "nrOfTwoFactors: " << nrOfTwoFactors << "\n" << std::endl;
-
-		for(int i = 0; i < nrOfTwoFactors; i++){
-			std::cout << "2" << std::endl;
+		if(std::cin >> number){	
+			
+        	if(number >= 0){
+        		std::cout << "fail" << std::endl;
+        	}
+        	std::cout << "\n";
 		}
+		else{
+			break;
+		}
+		/*
+			// TODO: get all prime factors
+			int nrOfTwoFactors = fact.divisor2(number);
+			//std::cout << "nrOfTwoFactors: " << nrOfTwoFactors << "\n" << std::endl;
 
+			for(int i = 0; i < nrOfTwoFactors; i++){
+				std::cout << "2" << std::endl;
+			}
+		*/
+		
+		/*
 		int factor = findPrimeFactor(number, fact);
 		std::cout << factor << std::endl;
 		int newNumber = number / factor;
@@ -140,22 +147,7 @@ int main (){
 				std::cout << factor << std::endl;
 				newNumber = newNumber / factor;
 			}
-		}
+		}*/
 
-		if(std::cin >> number){	
-			std::cout << "\n";
-			
-			std::cout << "I AM HERE" << std::endl;
-			
-			std::cout << number << std::endl;
-	
-        	if(number > 10000){
-        		std::cout << "fail" << std::endl;
-        		return 0;
-        	}
-		}
-		else{
-			break;
-		}
 	}
 }
