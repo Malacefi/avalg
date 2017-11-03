@@ -5,6 +5,14 @@
 #include <math.h>
 class factoring{
 	public:
+		long long powerHelp(int base,int exponent, int mod){
+			int toBeReturned = 1;
+			base = base % mod;
+			for(int i= 0; i<exponent; ++i){
+				toBeReturned = (toBeReturned * base) % mod;
+			}	
+			return toBeReturned;
+		}
 		/*
 		returns the amount of 2 factors in a number while removing the 2 factors from the original number
 		*/
@@ -36,12 +44,12 @@ class factoring{
 			for(int i = 0; i<1000; ++i){
 				//kan få overflow
 				 a = 2 + (std::rand() % ((number -1)- 2 + 1));
-				 long long temp = pow(a,t);
-				 long long u = temp % number;
+				// long long temp = pow(a,t);
+				// long long u = temp % number;
+				long long u = powerHelp(a,t,number);
 				 if(u == 1 || u == (number-1)) continue;
 				 	for(int j = 0; j < (s -1); ++j){
-				 		temp = pow(u,2);
-				 		u = temp % number;
+				 		u = (u*u) % number;
 				 		if(u == 1) return false;
 				 		if(u == (number -1)) break;
 				 	}
@@ -50,6 +58,7 @@ class factoring{
 			}
 			return true;
 		}
+
 };
 	int main (){
 		factoring fact;
@@ -59,9 +68,9 @@ class factoring{
 				if(fact.miller(i)){
 					std::cout << i << " is prime" << std::endl;
 				}
-				else{
+				/*else{
 					std::cout << i << " is not prime"<< std::endl;
-				}
+				}*/
 			}
 		}
 		long long a;
