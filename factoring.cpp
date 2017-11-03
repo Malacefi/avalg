@@ -5,6 +5,9 @@
 #include <math.h>
 class factoring{
 	public:
+		int factorBase(long long number){
+			return roof();
+		}
 		long long powerHelp(int base,int exponent, int mod){
 			int toBeReturned = 1;
 			base = base % mod;
@@ -62,21 +65,17 @@ class factoring{
 };
 	int main (){
 		factoring fact;
-		long long test = 9576890769;
-		for(int i = 3; i < 1000; ++i){
-			if((i & 1)== 1){
-				if(fact.miller(i)){
-					std::cout << i << " is prime" << std::endl;
-				}
-				/*else{
-					std::cout << i << " is not prime"<< std::endl;
-				}*/
-			}
-		}
 		long long a;
 		std::cin >> a;
 		while(1){
-			std::cout << "fail" << std::endl;
+			int b = fact.divisor2(a);
+			if(a!=1){
+				std::cout << "fail" << std::endl;
+			}else{
+				for(int i = 0;i< b;++i){
+					std::cout << 2 << std::endl;
+				}
+			}
 			if(std::cin >> a){	
 				std::cout << "\n";
 			}
