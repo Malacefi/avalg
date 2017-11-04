@@ -3,6 +3,7 @@
 #include <string>
 #include <stdlib.h>
 #include <math.h>
+#include "uint128_t.h"
 using namespace std;
 
 class factoring{
@@ -112,10 +113,11 @@ int main (){
     factoring fact;
     int moreInput = 1;
 
-    double n;
+    string n;
     do{
-        if(std::cin >> n){ 
-            if(n > 1000){
+        if(std::cin >> n){
+        std::cout <<"HOW BIG AMI?" << n.size() << std::endl; 
+            if(n.size()>18){
                 std::cout << "fail" << std::endl;
                 std::cout << "\n";
                 continue;
@@ -125,7 +127,8 @@ int main (){
             break;
         }
 
-        long long int number = (int) n;
+        long long int number = stoll(n.c_str());
+
         // TODO: get all prime factors
         int nrOfTwoFactors = fact.divisor2(number);
         //std::cout << "nrOfTwoFactors: " << nrOfTwoFactors << "\n" << std::endl;
