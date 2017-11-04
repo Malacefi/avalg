@@ -1,9 +1,9 @@
 // Authors: Emelie Eriksson & Marcus Lignercrona
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <stdlib.h>
 #include <math.h>
-#include "uint128_t.h"
 using namespace std;
 
 class factoring{
@@ -67,7 +67,7 @@ class factoring{
 
 // This implementation of gcd is from 
 // https://codereview.stackexchange.com/questions/66711/greatest-common-divisor
-int gcd(int a, int b){
+int gcd(long long int a, long long int b){
     return b == 0 ? a : gcd(b, a % b);
 }
 
@@ -78,18 +78,21 @@ long long int pollards(long long int n){
     srand (time(NULL));
 
     long long int x = (rand() % n) + 3; 
+   // std::cout << "x is: " << x << std::endl;
     long long int y = x;
+   // std::cout << "x is: " << x << std::endl;
     long long int a = (rand() % n) + 3; // Constant for the f(x) = x^2 + a function
+   // std::cout << "x is: " << x << std::endl;
 
     long long int currentgcd = 1;
 
     while(currentgcd == 1){
         // Turtle
         x = (x*x + a) % n;
-
         //Hare
         y = (y*y + a) % n;
         y = (y*y + a) % n;
+
 
         //new gcd
         currentgcd = gcd(abs(x - y), n);
@@ -100,7 +103,7 @@ long long int pollards(long long int n){
 
 long long int findPrimeFactor(long long int number, factoring fact){
     // Run pollard 
-    int foundFactor = pollards(number);
+    long long int foundFactor = pollards(number);
     // While the factor is not a prime
     while(!fact.miller(foundFactor)){
         // Keep factoring it
@@ -114,9 +117,11 @@ int main (){
     int moreInput = 1;
 
     string n;
+            std::ofstream file;
+                            file.open("data.txt");
+
     do{
         if(std::cin >> n){
-        std::cout <<"HOW BIG AMI?" << n.size() << std::endl; 
             if(n.size()>18){
                 std::cout << "fail" << std::endl;
                 std::cout << "\n";
@@ -128,27 +133,32 @@ int main (){
         }
 
         long long int number = stoll(n.c_str());
+        std::cout << "IS NUMBER"<< number<< std::endl;
+
 
         // TODO: get all prime factors
-        int nrOfTwoFactors = fact.divisor2(number);
+        int nrOfTwoFactors = fact.divisor2(number); 
         //std::cout << "nrOfTwoFactors: " << nrOfTwoFactors << "\n" << std::endl;
         for(int i = 0; i < nrOfTwoFactors; i++){
             std::cout << "2" << std::endl;
         }
         if(number==1) continue;
-        int factor = findPrimeFactor(number, fact);
+        long long int factor = findPrimeFactor(number, fact);
         std::cout << factor << std::endl;
         int newNumber = number / factor;
         while((newNumber) != 1){
             if(newNumber%factor == 0){
                 std::cout << factor << std::endl;
+             //   file << factor << std::endl;
                 newNumber = newNumber / factor;
             }else{
                 factor = findPrimeFactor(newNumber, fact);
                 std::cout << factor << std::endl;
+              //  file << factor << std::endl;
                 newNumber = newNumber / factor;
             }
         }
         std::cout << "\n";
     }while(1);
+    file.close();
 }
