@@ -81,11 +81,17 @@ void newPollard(mpz_t input,mpz_t output){
     if(!mpz_cmp_ui(input,1)){
         return;
     }
-    srand (time(NULL));
+    std::cout << "in pollard \n";
     mpz_t x,y,a,random;
     gmp_randstate_t state;
     gmp_randinit_default(state);
-    mpz_inits(x,y,a,random);
+    std::cout << "randinit? \n";
+    mpz_init(x);
+    mpz_init(y);
+    mpz_init(a);
+    mpz_init(random);
+    std::cout << "inits done";
+
 
     mpz_urandomb(random,state,100);
     mpz_mod(x,random,input);
@@ -98,8 +104,10 @@ void newPollard(mpz_t input,mpz_t output){
     mpz_add_ui(a,a,3);
 
     mpz_t currentgcd;
+    mpz_init(currentgcd);
     mpz_set_str(currentgcd,"1",0);
-    while(!mpz_cmp_ui(input,1)){
+    std::cout << "starting race! \n";
+    while(!mpz_cmp_ui(currentgcd,1)){
         //turtle
         mpz_mul(x,x,x);
         mpz_add(x,x,a);
@@ -165,11 +173,14 @@ long long int findPrimeFactor(long long int number, factoring fact){
     return foundFactor;
 }
 void newFindPrimeFactor(mpz_t input,mpz_t output){
+    std::cout << "starting findPrimeFactor \n";
     mpz_t foundFactor;
     mpz_init(foundFactor);
-    while(!mpz_probab_prime_p(foundFactor,15)){
+    while(mpz_probab_prime_p(foundFactor,50)==0){
+        std::cout << "starting pollard \n";
         newPollard(input, foundFactor);
     }
+    std::cout << " i got out\n";
     mpz_set(output,foundFactor);
     return;
 }
@@ -200,24 +211,30 @@ int main (){
                 primes.push_back(std::to_string(earlyPrimes[i]));
             }
         }
-        mpz_t factor;
-        mpz_init(factor);
-        while(mpz_cmp_ui(input,1)>0){
-            newFindPrimeFactor(input,factor);
-            do{
-                mpz_divexact(input,input,factor);
-                char * temp = mpz_get_str(temp,10,factor);
-                primes.push_back(temp);
-            }while(mpz_divisible_p(input,factor));
+        if(mpz_probab_prime_p(input,15)){
+            char * temp = mpz_get_str(nullptr,10,input);
+            std::string tempura(temp);
+            primes.push_back(tempura);
+            mpz_divexact(input,input,input);
+        }
+        else if(mpz_cmp_ui(input,1)){
+            std::cout << "trying! \n";
+            mpz_t factor;
+            mpz_init(factor);
+            while(mpz_cmp_ui(input,1)){
+                std::cout << "segfaults here?\n";
+                newFindPrimeFactor(input,factor);
+                char * temp2 = mpz_get_str(nullptr,10,factor);
+                std::string tempura2(temp2);
+                std::cout << "Found factor: " <<tempura2 << "\n";
+                do{
+                    mpz_divexact(input,input,factor);
+                    char * temp = mpz_get_str(nullptr,10,factor);
+                    primes.push_back(temp);
+                }while(mpz_divisible_p(input,factor));
+            }
         }
         //last check if the last factor is prime or = 1
-        /*if(mpz_probab_prime_p(input,15)){
-            char * temp = mpz_get_str(temp,10,input);
-            primes.push_back(temp);
-            for(std::vector<std::string>::iterator it = primes.begin(); it !=primes.end();++it){
-                std::cout << *it << "\n";
-            }
-        }*/
         if(!mpz_cmp_ui(input,1)){
             for(std::vector<std::string>::iterator it = primes.begin(); it !=primes.end();++it){
                 std::cout << *it << "\n";
