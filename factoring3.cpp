@@ -81,16 +81,16 @@ void newPollard(mpz_t input,mpz_t output){
     if(!mpz_cmp_ui(input,1)){
         return;
     }
-    std::cout << "in pollard \n";
+   // std::cout << "in pollard \n";
     mpz_t x,y,a,random;
     gmp_randstate_t state;
     gmp_randinit_default(state);
-    std::cout << "randinit? \n";
+    //std::cout << "randinit? \n";
     mpz_init(x);
     mpz_init(y);
     mpz_init(a);
     mpz_init(random);
-    std::cout << "inits done";
+    //std::cout << "inits done";
 
 
     mpz_urandomb(random,state,100);
@@ -106,8 +106,12 @@ void newPollard(mpz_t input,mpz_t output){
     mpz_t currentgcd;
     mpz_init(currentgcd);
     mpz_set_str(currentgcd,"1",0);
-    std::cout << "starting race! \n";
-    while(!mpz_cmp_ui(currentgcd,1)){
+   // std::cout << "starting race! \n";
+    int numberOfAtempts = 0;
+    while(!mpz_cmp_ui(currentgcd,1) && numberOfAtempts < 430000){
+        numberOfAtempts++;
+        //std::cout << "number of atempts" << numberOfAtempts << "\n";
+       // std::cout << "Do I sometimes go infinite?";
         //turtle
         mpz_mul(x,x,x);
         mpz_add(x,x,a);
@@ -121,9 +125,14 @@ void newPollard(mpz_t input,mpz_t output){
         mpz_add(y,y,a);
         mpz_mod(y,y,input);
 
-        mpz_gcd(currentgcd,x,y);
+
+        mpz_sub(currentgcd,x,y);
+        mpz_abs(currentgcd,currentgcd);
+        mpz_gcd(currentgcd,currentgcd,input);
+
     }
     mpz_set(output,currentgcd);
+    if(numberOfAtempts>429998) mpz_set_si(output,-1);
 };
 
 // This implementation of gcd is from 
@@ -173,14 +182,12 @@ long long int findPrimeFactor(long long int number, factoring fact){
     return foundFactor;
 }
 void newFindPrimeFactor(mpz_t input,mpz_t output){
-    std::cout << "starting findPrimeFactor \n";
     mpz_t foundFactor;
     mpz_init(foundFactor);
-    while(mpz_probab_prime_p(foundFactor,50)==0){
-        std::cout << "starting pollard \n";
+    while(mpz_probab_prime_p(foundFactor,15)==0){
         newPollard(input, foundFactor);
+        if(!mpz_cmp_si(foundFactor,-1))break; 
     }
-    std::cout << " i got out\n";
     mpz_set(output,foundFactor);
     return;
 }
@@ -218,19 +225,21 @@ int main (){
             mpz_divexact(input,input,input);
         }
         else if(mpz_cmp_ui(input,1)){
-            std::cout << "trying! \n";
             mpz_t factor;
             mpz_init(factor);
             while(mpz_cmp_ui(input,1)){
-                std::cout << "segfaults here?\n";
                 newFindPrimeFactor(input,factor);
-                char * temp2 = mpz_get_str(nullptr,10,factor);
-                std::string tempura2(temp2);
-                std::cout << "Found factor: " <<tempura2 << "\n";
+                if(!mpz_cmp_si(factor,-1)){
+                    char * temp3 = mpz_get_str(nullptr,10,input);
+                    std::string tempura(temp3);
+                    //std::cout << "shoudl fail cuz value is" << tempura << "\n";
+                    break;
+                } 
                 do{
                     mpz_divexact(input,input,factor);
                     char * temp = mpz_get_str(nullptr,10,factor);
-                    primes.push_back(temp);
+                    std::string tempura(temp);
+                    primes.push_back(tempura);
                 }while(mpz_divisible_p(input,factor));
             }
         }
